@@ -4,16 +4,16 @@ import './App.css';
 import { AppTab } from './pages/AppTab';
 
 class App extends React.Component {
-  // tslint:disable-next-line:no-empty
-  componentDidMount() {}
+    // tslint:disable-next-line:no-empty
+    componentDidMount() {}
 
-  render() {
-    return (
-      <MuiThemeProvider>
-        <AppTab />
-      </MuiThemeProvider>
-    );
-  }
+    render() {
+        return (
+            <MuiThemeProvider>
+                <AppTab/>
+            </MuiThemeProvider>
+        );
+    }
 }
 
 export default App;

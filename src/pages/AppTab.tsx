@@ -4,6 +4,7 @@ import MapsPersonPin from 'material-ui/svg-icons/maps/person-pin';
 import FontIcon from 'material-ui/FontIcon';
 import SwipeableViews from 'react-swipeable-views';
 import './AppTab.css';
+import { HomePage } from './homePage/HomePage';
 const styles: React.CSSProperties = {
   headline: {
     fontSize: 24,
@@ -30,16 +31,16 @@ export class AppTab extends React.Component<{}, {}> {
     return (
       <div className={'tab-container'}>
         <SwipeableViews 
+          style={{height: '100%'}}
           className={'tab-content'}
           index={this.state.slideIndex}
           onChangeIndex={this.handleChange}
         >
-          <div>
-            <h2 style={styles.headline}>Tabs with slide effect</h2>
-            Swipe to see the next slide.<br />
+          <div className={'tab-panel'}>
+            <HomePage/>
           </div>
-          <div style={styles.slide}>slide n°2</div>
-          <div style={styles.slide}>slide n°3</div>
+          <div className={'tab-panel'} style={styles.slide}>slide n°2</div>
+          <div className={'tab-panel'} style={styles.slide}>slide n°3</div>
         </SwipeableViews>
         <Tabs onChange={this.handleChange} value={slideIndex}>
           <Tab
