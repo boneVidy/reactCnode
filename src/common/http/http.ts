@@ -17,8 +17,7 @@ class HttpService {
             paramStr = Object
             .keys(param)
             .reduce((prev, next) => {
-                const newStr = `${prev}${next}=${param[next]}&`;
-                return newStr;
+                return `${prev}${next}=${param[next]}&`;
             },      '?');
             paramStr = paramStr.substring(0, paramStr.length - 1);
         }
