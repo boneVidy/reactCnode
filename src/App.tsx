@@ -1,8 +1,8 @@
 import * as React from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import './App.css';
-import { AppTab } from './pages/AppTab';
 
+import Entry from './routes/entry';
 class App extends React.Component {
     // tslint:disable-next-line:no-empty
     componentDidMount() {}
@@ -10,7 +10,7 @@ class App extends React.Component {
     render() {
         return (
             <MuiThemeProvider>
-                <AppTab/>
+                <Entry/>
             </MuiThemeProvider>
         );
     }

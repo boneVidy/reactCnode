@@ -4,7 +4,7 @@ import MapsPersonPin from 'material-ui/svg-icons/maps/person-pin';
 import FontIcon from 'material-ui/FontIcon';
 import SwipeableViews from 'react-swipeable-views';
 import './AppTab.css';
-import { HomePage } from './homePage/HomePage';
+import { HomePage } from '../homePage/HomePage';
 const styles: React.CSSProperties = {
   headline: {
     fontSize: 24,

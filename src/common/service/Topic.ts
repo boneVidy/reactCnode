@@ -12,7 +12,7 @@ export interface TopicItem {
   index?: number;
   id: string;
   author_id: string;
-  tab: TopicCate;
+  tab: TopicCate | string;
   content: string;
   title: string;
   last_reply_at: string;
@@ -30,10 +30,13 @@ export interface TopicAuthor {
 export interface TopiceListReponse extends BaseResponse {
   data: TopicItem[];
 }
+export interface TopicDetailResponse extends BaseResponse {
+  data: TopicDetail;
+}
 class TopicService {
   getList(query: TopicQuery): Promise<TopicItem[]> {
     const defaultQuery = {
-      limit: 20,
+      limit: 40,
       mdrender: 'false',
       topic: 'share'
     };
@@ -45,6 +48,27 @@ class TopicService {
       return res.data as TopicItem[];
     });
   }
+ 
+  getDetailById (id: string) {
+    return Http.get<TopicDetailResponse>(`topic/${id}`).then(res => {
+      return res.data as TopicDetail;
+    });
+  }
 }
 
 export const Topic = new TopicService();
+
+export interface TopicDetail extends TopicItem {
+  replies: Reply[];
+  is_collect: boolean;
+}
+
+interface Reply {
+  id: string;
+  author: TopicAuthor;
+  content: string;
+  ups: string[];
+  create_at: string;
+  reply_id?: string;
+  is_uped: boolean;
+}
