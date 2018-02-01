@@ -8,6 +8,7 @@ export interface GetParam {
 }
 export interface BaseResponse {
     success: boolean;
+    // data?: T;
 }
 class HttpService {
 

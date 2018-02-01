@@ -6,45 +6,60 @@ import Divider from 'material-ui/Divider';
 import Avatar from 'material-ui/Avatar';
 import { darkBlack } from 'material-ui/styles/colors';
 import { Topic, TopicItem } from '../../common/service/Topic';
-import { InfiniteScroller } from 'react-iscroller';
+// import { InfiniteScroller } from 'react-iscroller';
 import { RouteProps } from 'react-router';
 import { Link } from 'react-router-dom';
-// import IconButton from 'material-ui/IconButton';
-// import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
-// import IconMenu from 'material-ui/IconMenu';
-// import MenuItem from 'material-ui/MenuItem';
 
 interface HomePageState {
   topicList: TopicItem[];
+  scrollTop: number;
 }
 
 export class HomePage extends React.Component<RouteProps, HomePageState> {
-  // private _name: string;
-  page = 1;
-  loadedLen = 0;
+  static cachePage = 0;
+  static cacheLists: TopicItem[] = [];
+  static cacheScrollTop = 0;
   state = {
-    topicList: new Array<TopicItem>()
+    topicList: [],
+    scrollTop: 0
   };
-  loadMore = async () => {
+  scroller: HTMLDivElement;
+  private isLoading = false;
+
+    loadMore = async () => {
     await this.getTopicList();
     return true;
   }
   async componentDidMount() {
-    this.getTopicList();
+      if (HomePage.cacheLists.length) {
+        this.setState({ topicList: HomePage.cacheLists}, () => {
+            // setTimeout(() => {
+            //     // this.scroller.scrollTop = HomePage.cacheScrollTop;
+            // },         300);
+            this.scroller.scrollTo({top: HomePage.cacheScrollTop});
+
+            // this.setState({ scrollTop: HomePage.cacheScrollTop });
+        });
+      } else {
+        HomePage.cachePage = 1;
+        return !this.isLoading && this.getTopicList();
+      }
   }
 
   getTopicList = async () => {
     try {
-      const data = (await Topic.getList({ page: this.page })).map(
-        (item, index) => {
-          item.index = ++this.loadedLen;
-          return item;
-        }
-      );
-      this.setState({ topicList: this.state.topicList.concat(data) });
-      this.page++;
+      this.isLoading = true;
+      const data = (await Topic.getList({ page: HomePage.cachePage }));
+
+      const newList: TopicItem[] = [...this.state.topicList, ...data];
+      this.setState({ topicList: newList });
+      HomePage.cacheLists = newList;
+      HomePage.cachePage ++;
+
     } catch (error) {
       console.error(error);
+    } finally {
+        this.isLoading = false;
     }
   }
   // onItemClickHandler = (id: number) => {
@@ -52,9 +67,9 @@ export class HomePage extends React.Component<RouteProps, HomePageState> {
   // }
   renderItem = (topic: TopicItem) => {
     return (
-      <Link to={`/detail/${topic.id}`}>
+      <Link key={topic.id}  to={`/detail/${topic.id}`}>
         <ListItem
-          
+
           key={topic.id}
           leftAvatar={
             <Avatar src={topic.author ? topic.author.avatar_url : ''} />}
@@ -74,24 +89,46 @@ export class HomePage extends React.Component<RouteProps, HomePageState> {
       </Link>
     );
   }
+  scrollHandler: React.UIEventHandler<HTMLDivElement> = (ev: React.UIEvent<HTMLDivElement>) => {
+      const curScrollTop = ev.nativeEvent!.srcElement!.scrollTop;
+      console.log(HomePage.cacheScrollTop = curScrollTop);
+      console.log(curScrollTop, this.scroller.scrollHeight);
+      if (curScrollTop >= this.scroller.scrollHeight - this.scroller.offsetHeight) {
+          this.getTopicList();
+      }
+  }
+
   render() {
     const { topicList } = this.state;
 
     return (
-      <div className="page">
-        {
-          topicList.length ?
-          <InfiniteScroller
-            itemAverageHeight={72}
-            containerHeight={window.innerHeight - 72}
-            items={topicList}
-            itemKey={'id'}
-            onEnd={this.getTopicList}
-            onRenderCell={this.renderItem}
-          /> : '暂无数据'
-        }
-       
+      <div className="page scroller" ref={(dom: HTMLDivElement) => this.scroller = dom} onScroll={this.scrollHandler}>
+          <div>
+              {
+                  topicList.map(this.renderItem)
+              }
+          </div>
+        {/*{*/}
+          {/*topicList.length ?*/}
+          {/*<InfiniteScroller*/}
+            {/*onScroll={this.scrollHandler}*/}
+            {/*initialScrollTop={scrollTop}*/}
+            {/*itemAverageHeight={72}*/}
+            {/*containerHeight={window.innerHeight - 72}*/}
+            {/*items={topicList}*/}
+
+            {/*itemKey={'id'}*/}
+            {/*onEnd={this.getTopicList}*/}
+            {/*onRenderCell={this.renderItem}*/}
+          {/*/> : '暂无数据'*/}
+        {/*}*/}
+
       </div>
     );
   }
+
+    // private scrollHandler(dom: HTMLDivElement) {
+    //     HomePage.cacheScrollTop = dom.scrollTop;
+    //     console.log(HomePage.cacheScrollTop, dom.scrollTop);
+    // }
 }

@@ -36,7 +36,7 @@ export interface TopicDetailResponse extends BaseResponse {
 class TopicService {
   getList(query: TopicQuery): Promise<TopicItem[]> {
     const defaultQuery = {
-      limit: 40,
+      limit: 10,
       mdrender: 'false',
       topic: 'share'
     };
@@ -63,7 +63,7 @@ export interface TopicDetail extends TopicItem {
   is_collect: boolean;
 }
 
-interface Reply {
+export interface Reply {
   id: string;
   author: TopicAuthor;
   content: string;
