@@ -1,6 +1,6 @@
 import { Http, BaseResponse } from '../http/http';
 
-declare type TopicCate = 'ask' | 'share' | 'job' | 'good';
+export declare type TopicCate = '' | 'ask' | 'share' | 'job' | 'good';
 export interface TopicQuery {
   page: number;
   tab?: TopicCate; // 主题分类。目前有 ask share job good
@@ -38,7 +38,7 @@ class TopicService {
     const defaultQuery = {
       limit: 10,
       mdrender: 'false',
-      topic: 'share'
+      topic: ''
     };
 
     return Http.get<TopiceListReponse>('topics', {

@@ -11,8 +11,9 @@
 }
 .tab-content .react-swipeable-view-container{
     height: 100%;
-    overflow: hidden;
+    /*overflow: hidden;*/
 }
 .tab-panel {
+    box-sizing: border-box;
     height: 100%;
 }

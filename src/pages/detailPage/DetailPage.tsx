@@ -8,7 +8,7 @@ import Card from 'material-ui/Card/Card';
 import { ContentComponent } from './ContentComponent/ContentComponent';
 import { ReplyList } from './ReplyComponent/ReplyList';
 import CardHeader from 'material-ui/Card/CardHeader';
-import Divider from "material-ui/Divider";
+import Divider from 'material-ui/Divider';
 
 interface DetailPageProps extends RouteComponentProps <{
     id: string
@@ -61,14 +61,15 @@ export class DetailPage extends React.Component <DetailPageProps,
 
             <div className={'page auto-scroll'}>
                 {topic
-                    ? [<Card key={'topic-content'}>
-                        <CardHeader
-                            title={topic.title}
-                            subtitle={topic.author.loginname}
-                            avatar={topic.author.avatar_url}
-                        />
-                        <Divider  inset={false} />
-                        <ContentComponent html={topic.content} className={'padding-left padding-right'} />
+                    ? [<Card key={'topic-content'} expanded={true}>
+                            <CardHeader
+
+                                title={topic.title}
+                                subtitle={topic.author.loginname}
+                                avatar={topic.author.avatar_url}
+                            />
+                            <Divider  inset={false} />
+                            <ContentComponent html={topic.content} className={'padding-left padding-right'} />
                         </Card>,
                         <ReplyList key={'topic-replies'} list={topic.replies}/>]
 
